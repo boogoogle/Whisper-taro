@@ -1,0 +1,16 @@
+.Home-container {
+    height: 100vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+    .home__content {
+        flex: 1;
+        overflow: scroll;
+    }
+
+
+    .home__tabs {
+        flex: none;
+    }
+}
