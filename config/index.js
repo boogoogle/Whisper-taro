@@ -1,3 +1,6 @@
+
+import { resolve } from 'path'
+
 const config = {
   projectName: 'Whisper-taro',
   date: '2020-9-8',
@@ -11,6 +14,10 @@ const config = {
   outputRoot: 'dist',
   plugins: [],
   defineConstants: {
+  },
+  alias: {
+    // eslint-disable-next-line no-undef
+    '@': resolve(__dirname, '../src')
   },
   copy: {
     patterns: [
@@ -62,7 +69,7 @@ const config = {
   }
 }
 
-module.exports = function (merge) {
+export default function (merge) {
   if (process.env.NODE_ENV === 'development') {
     return merge({}, config, require('./dev'))
   }

@@ -2,8 +2,8 @@ export default {
   pages: [
     // 'pages/index/index',
     'pages/login/login',
-    // 'pages/home/home',
-    // 'pages/chat/chat-list/chat-list',
+    'pages/home/home',
+    'pages/conversation/ConvPage/ConvPage',
     // 'pages/chating/chating-page',
   ],
   window: {

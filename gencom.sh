@@ -20,7 +20,7 @@ done
 
 # 修改文件名
 mv com.scss $NAME.scss
-mv com.jsx $NAME.jsx
+mv com.tsx $NAME.tsx
 
 
 echo "the com is --> $NAME -- $PWD"

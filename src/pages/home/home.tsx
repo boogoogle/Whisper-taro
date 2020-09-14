@@ -1,42 +1,48 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Button, Text } from '@tarojs/components'
-// import {userInit} from '../../scripts/userInit'
+import storage from '@/helper/storage'
+import CreateConversation from '@/components/createConversation'
 
-import { AtTabBar }  from 'taro-ui'
-
-import ChatList from '../chat/chat-list/chat-list'
-import AddConversation from '../chat/create/create'
+import { AtNavBar } from 'taro-ui'
 import './home.scss'
+import Store from '../../store'
 
-function Home(){
-      const [tab, setTab] = useState(0)
-      
+const {UserData, connect} = Store
+
+function Home(props){
+      const [id, setId] = useState(props.id)
       function handleClick (value) {
-        this.setState({
-          current: value
-        })
+        // props.updateId(33444)
       }
-      
 
+      useEffect(() => {
+        if(props.id) {
+          setId(props.id)
+          return 
+        }
+        let storagedId = storage.getItem('id').then((rst: any)=>{
+          if(rst) {
+            setId(rst)
+          } 
+        })
+      }, [props.id]);
+      
       return (
           <View className='Home-container'>
+            <AtNavBar
+              onClickRgIconSt={handleClick}
+              color='#000'
+              title='会话列表'
+              leftText={id + ''}
+              rightFirstIconType='add'
+            />
               <View className='home__content'>
-                  {!this.state.current ? <ChatList></ChatList> : <AddConversation></AddConversation>}
+                <CreateConversation></CreateConversation>
               </View>
-              <AtTabBar
-                className='home__tabs'
-                tabList={[
-                      { title: '', iconType: 'message', text: this.props.conversation.total },
-                      { title: '', iconType: 'add' },
-                      { title: '', iconType: 'user'}
-                  ]}
-                onClick={this.handleClick.bind(this)}
-                current={this.state.current}
-              />
+              
           </View>
         
       )
-
 }
 
-export default Home
+export default connect(Home, UserData)

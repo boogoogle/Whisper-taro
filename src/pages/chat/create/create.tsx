@@ -1,12 +1,11 @@
-import { ComponentClass } from 'react'
 import Taro, { Component, Config } from '@tarojs/taro'
 import { View, } from '@tarojs/components'
 import { AtButton } from 'taro-ui'
 import store from '../../../store'
 import {updateUserInfo} from '../../../store/actions/user'
 import { YooRealtime } from '../../../scripts/avInit'
-const { TextMessage } = require( "../../../libs/realtime");
-import { connect } from '@tarojs/redux';
+
+import { TextMessage } from "leancloud-realtime";
 
 const mapState2Props = ({user}) => {
     return {
@@ -69,7 +68,7 @@ class CreateChatPage extends Component {
 
     render () {
       return (
-        <View className="create-chat-page">
+        <View className='create-chat-page'>
             creating 
             <AtButton onClick={this.createIMClient.bind(this)}>创建</AtButton>
         </View>

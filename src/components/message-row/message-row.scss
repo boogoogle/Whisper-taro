@@ -1,0 +1,23 @@
+.message-row-container {
+    box-sizing: border-box;
+    padding: 6px;
+
+    .flex-reverse {
+        flex-direction: row-reverse;
+
+        .message__text {
+            justify-content: flex-end;
+        }
+    }
+    .message__text {
+        font-size: 14px;
+        box-sizing: border-box;
+        padding: 0 14px;
+        display: flex;
+
+        .text-wrapper {
+            width: fit-content;
+        }
+    }
+}
+

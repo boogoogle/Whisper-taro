@@ -1,21 +1,32 @@
-import React, {useState} from 'react'
-import { View, } from '@tarojs/components'
+import React, {useState, useEffect} from 'react'
 import Taro from '@tarojs/taro'
+import {View} from '@tarojs/components'
+import storage from '@/helper/storage' 
+import LCClient from '@/scripts/LCClient'
 import { AtButton,AtNoticebar,AtInput,AtMessage } from 'taro-ui'
 import './login.scss'
 
 import Store from '../../store'
 
+const {UserData, connect} = Store
 
 
-function LoginPage() {
+function LoginPage(props) {
       // const {uuid} = this.$router.params // 先从路由取值,方便测试
-    const [id, setId] = useState('')
+    const [id, setId] = useState(props.id)
     const [suggestId, setSuggestId] = useState('')
 
-    const userFromStore = Store.pick('user',{
-      'id': v => setId(v) // 根据需要配置对应key的回调, 如果只是取值某个属性,完全可以不声明
-    })
+    useEffect(() => {
+      if(props.id) {
+        setId(props.id)
+        return 
+      }
+      storage.getItem('id').then(id=>{
+        if(id) {
+          setId(id)
+        } 
+      })
+    }, [props.id]);
 
     function confirm(){
       if(!id) {
@@ -25,7 +36,10 @@ function LoginPage() {
         })
         return
       }
-      userFromStore.updateAttr('id', id)
+      props.updateId(id)
+      storage.setItem('id', id)
+      LCClient.init()
+
       Taro.navigateTo({
         url: '/pages/home/home'
       })
@@ -72,4 +86,4 @@ function LoginPage() {
 
 // ele.link('user')(LoginPage)
 
-export default LoginPage
+export default connect(LoginPage, UserData)

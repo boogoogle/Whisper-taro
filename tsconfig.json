@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "allowJs": false,
+    "jsx": "react",
+    "esModuleInterop": true, // 这个很重要啊
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    },
+    "exclude": [
+      "leancloud-cloud"
+    ]
+  }
+}

@@ -1,3 +1,3 @@
-import ele from "./com.jsx";
+import ele from "./com";
 
 export default ele;

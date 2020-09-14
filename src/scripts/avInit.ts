@@ -1,8 +1,9 @@
-let AV
+
 import { Realtime } from "leancloud-realtime";
-import { TypedMessagesPlugin } from 'leancloud-realtime-plugin-typed-messages';
+import { TypedMessagesPlugin, ImageMessage } from 'leancloud-realtime-plugin-typed-messages';
 import {AV_APP_CONFIG} from './config'
 
+let AV
 if (process.env.TARO_ENV === 'weapp') {
     AV = require('leancloud-storage/dist/av-weapp.js');
 } else {

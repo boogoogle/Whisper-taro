@@ -1,9 +1,8 @@
-
 /**
  * 本地存储,用来抹平小程序和网页
  */
 
-const setItem = (key:string, value:string): void => {
+const setItem = (key:string, value:string | number): void => {
     switch(process.env.TARO_ENV){
         case 'h5':
             window.localStorage.setItem(key, value);
@@ -49,21 +48,14 @@ const getItem = (key: string): any => {
     }
 }
 
-const initStorage = async(): Promise<void> => {
-    try{
-        const userInfo = await getItem('userInfo');
-        // debugger
-        setItem('userInfo', userInfo || '');
-    } catch(e) {
-        console.log(e, 'initStorage error')
-        setItem('userInfo','');
-    }
-    
+function hello(){
+    console.log('hello storage')
 }
 
-initStorage()
+
 
 export default  {
     setItem,
-    getItem
+    getItem,
+    hello
 }
