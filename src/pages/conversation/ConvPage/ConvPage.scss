@@ -1,3 +1,13 @@
 .ConvPage-container {
     // 组件的最外层类名, 保证作用域
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+
+    .msg-content {
+        flex: 1
+    }
+    .input-box-wrapper {
+        flex: none
+    }
 }

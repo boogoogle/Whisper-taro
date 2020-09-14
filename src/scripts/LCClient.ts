@@ -51,8 +51,8 @@ class LCClient  {
     
         // 未读消息
         this.IMClient.on(Event.UNREAD_MESSAGES_COUNT_UPDATE, function(conversations) {
-            const total = conversations ? conversations.length : 0
-            console.log(conversations, '1')
+            // const total = conversations ? conversations.length : 0
+            // console.log(conversations, '1')
             conversations.forEach(conv => {
               const {id} = conv
               // if (this.eventObserverMap[id]) {
