@@ -10,45 +10,45 @@ import LCClient from '@/scripts/LCClient'
 import Store from '@/store'
 import MessageRow from '@/components/message-row'
 import InputBox from '@/components/input-box'
-import {v4 as uuid} from 'uuid'
 
-import { } from 'taro-ui'
+import { AtNavBar } from 'taro-ui'
 import './ConvPage.scss';
 
 
 const {ConvPageData, connect} = Store
 
 function ConvPage(props){
-  const [convList, setConvList] = useState([])
+  const [messageList, setMessageList] = useState([])
   const [currentConv, setCurrentConv] = useState(null)
-  const convId =  getCurrentInstance().router.params.convId
 
-  useEffect(()=>{
+  useMemo(()=>{
+    const convId =  getCurrentInstance().router.params.convId
     LCClient.init().then( async IMClient => {
       const conv = await IMClient.getConversation(convId)
       if(!conv)return
       setCurrentConv(conv)
       fetchHistory(conv, convId)
     })
-  }, [convId])
+  },[])
 
   useEffect( // 这里和用useMemo啥区别呢?
     () => {
-      // console.log('useMemo', convList)
+      const convId =  getCurrentInstance().router.params.convId
+      // console.log('useMemo', messageList)
       function handleMessageReceived(message){
         // console.log("convpage -- handle msg received")
-        setConvList([].concat(convList,message))
+        setMessageList([].concat(messageList,message))
       }
-      LCClient.addEventObserver(uuid(), convId, handleMessageReceived);
+      LCClient.addEventObserver(convId, handleMessageReceived);
     },
-    [convId, convList]
+    [messageList]
   );
   async function fetchHistory(conv,id){
     try {
       const messages = await conv.queryMessages({
         limit:20
       })
-      setConvList(messages)
+      setMessageList(messages)
     } catch (error) {
       console.log(error)
     }
@@ -62,16 +62,27 @@ function ConvPage(props){
     currentConv.send(textMsg).then(msg => {
       console.log('发送成功 --> ', msg)
       // 发送成功后手动塞入到当前消息列表中
-      setConvList(convList.concat([msg]))
+      setMessageList(messageList.concat([msg]))
     }).catch(console.error);
+  }
+
+  function handleClickBack(){
+    Taro.navigateTo({
+      url:'/pages/home/home'
+    })
   }
 
   return (
     <View className='ConvPage-container'>
+      <AtNavBar
+        onClickLeftIcon={handleClickBack}
+        color='#000'
+        title='聊天详情'
+        leftIconType='chevron-left'
+      />
       <View className='msg-content'>
-        <Text>{convList.length}</Text>
         {
-          convList.map(cv => <MessageRow message={cv} key={cv.id} />)
+          messageList.map(msg => <MessageRow message={msg} key={msg.id} />)
         }
       </View>
       <InputBox onSubmit={sendMsg}></InputBox>

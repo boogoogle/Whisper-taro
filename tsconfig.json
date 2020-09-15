@@ -8,9 +8,6 @@
       "@/*": [
         "./src/*"
       ]
-    },
-    "exclude": [
-      "leancloud-cloud"
-    ]
+    }
   }
 }

@@ -1,3 +1,7 @@
 .createConversation-container {
     // 组件的最外层类名, 保证作用域
+    display: flex;
+    .at-input{
+        flex: 1;
+    }
 }

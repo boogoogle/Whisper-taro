@@ -39,8 +39,6 @@
     "@tarojs/cli": "3.0.9",
     "@tarojs/components": "3.0.9",
     "@tarojs/react": "3.0.9",
-    "@tarojs/redux": "^2.2.10",
-    "@tarojs/redux-h5": "^2.2.10",
     "@tarojs/runtime": "3.0.9",
     "@tarojs/taro": "^3.0.10",
     "leancloud-realtime": "^5.0.0-rc.3",
@@ -49,9 +47,6 @@
     "lodash": "4.17.15",
     "react": "^16.10.0",
     "react-dom": "^16.10.0",
-    "redux": "^4.0.5",
-    "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.3.0",
     "taro-ui": "^3.0.0-alpha.3",
     "uuid": "^8.3.0"
   },

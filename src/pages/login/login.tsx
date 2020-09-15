@@ -12,7 +12,6 @@ const {UserData, connect} = Store
 
 
 function LoginPage(props) {
-      // const {uuid} = this.$router.params // 先从路由取值,方便测试
     const [id, setId] = useState(props.id)
     const [suggestId, setSuggestId] = useState('')
 

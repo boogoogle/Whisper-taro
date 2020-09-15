@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useMemo} from 'react';
 import { View } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import { AtButton, AtInput} from 'taro-ui'
@@ -13,13 +13,13 @@ function CreateConversation(){
 
   const [friendId, setFriendId] = useState('')
 
-  useEffect(()=>{
-    console.log('ue')
+  useMemo(()=>{
+    console.log("useEffect")
     storage.getItem('friendId').then(id => {
       if(!id)return
       setFriendId(id)
     })
-  }, [friendId])
+  },[])
 
   function createConv(){
     console.log(friendId, 'f')
@@ -34,7 +34,7 @@ function CreateConversation(){
       Taro.navigateTo({
           url: `/pages/conversation/ConvPage/ConvPage?convId=${conversation.id}`
       })
-      return conversation.send(new TextMessage('会话已创建, time: ' + (new Date())))
+      return conversation.send(new TextMessage(`Hi, I am ${LCClient.IMClient.id}`))
     }).then(() => {
         // Taro.navigateTo({
         //     url: '/pages/chat/chat'

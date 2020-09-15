@@ -19,13 +19,21 @@ class LCClient  {
       console.log("-----> LCCClient constructor")
     }
 
-    addEventObserver(key: string, convId:string, cb) {
+    // 会话页面使用 ConvPage
+    addEventObserver(convId:string, cb) {
         console.log('addEventObserver---', this.eventObserverMap)
         if(!convId)return
-        this.eventObserverMap[convId] = {  // key来标识ConvPage
+        this.eventObserverMap[convId] = {
           convId,
           cb: cb
         }
+    }
+    // 聊天列表页面使用 Home
+    addConversationObserver(cb){
+      console.log('addConversationObserver')
+      this.eventObserverMap['conversationList'] = {
+        cb,
+      }
     }
     async init(){
       console.log("page revoke LCCLient.init -->->", arguments)
@@ -52,25 +60,16 @@ class LCClient  {
         this.IMClient.on(Event.MESSAGE, (message:any) => {
           console.log('Message received: \n '+ JSON.stringify(message));
           const {cid} = message
-          if (self.eventObserverMap[cid]) {
-            // if(cid === ConvPageData.convId) { // 当前聊天页的convID,
-              self.eventObserverMap[cid].cb(message)
-            // }
+          if (self.eventObserverMap[cid]) {  // ConvPage
+            self.eventObserverMap[cid].cb(message)
           }
         });
     
         // 未读消息
         this.IMClient.on(Event.UNREAD_MESSAGES_COUNT_UPDATE, function(conversations) {
             // const total = conversations ? conversations.length : 0
-            // console.log(conversations, '1')
-            conversations.forEach(conv => {
-              const {id} = conv
-              // if (this.eventObserverMap[id]) {
-              //   if(id === ConvPageData.convId) {
-              //     this.eventObserverMap[id].cb(message)
-              //   }
-              // }
-            })
+            // console.log(conversations)
+            self.eventObserverMap['conversationList'].cb(conversations)
             
         });
     }

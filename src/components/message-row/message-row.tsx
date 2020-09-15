@@ -2,8 +2,8 @@ import React, {} from 'react';
 import Taro, {Component} from '@tarojs/taro'
 import { AtAvatar } from 'taro-ui'
 import { View,Text } from '@tarojs/components';
-import './message-row.scss'
 import Store from '@/store';
+import './message-row.scss'
 
 function MessageRow(props){
     const {message} = props
