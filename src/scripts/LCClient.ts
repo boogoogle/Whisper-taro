@@ -20,12 +20,15 @@ class LCClient  {
     }
 
     addEventObserver(key: string, convId:string, cb) {
+        console.log('addEventObserver---', this.eventObserverMap)
+        if(!convId)return
         this.eventObserverMap[convId] = {  // key来标识ConvPage
           convId,
           cb: cb
         }
     }
     async init(){
+      console.log("page revoke LCCLient.init -->->", arguments)
         if (this.IMClient) {
           return Promise.resolve(this.IMClient)
         }
@@ -36,17 +39,24 @@ class LCClient  {
           console.log(instance)
           this.IMClient = instance
           this.reveiveMessage()
+          UserData.update('id', id)
+          return Promise.resolve(this.IMClient)
         } else {
           Taro.navigateTo({
             url: '/pages/login/login'
           })
         }
-        
     }
     reveiveMessage(){
+        const self = this
         this.IMClient.on(Event.MESSAGE, (message:any) => {
           console.log('Message received: \n '+ JSON.stringify(message));
-          console.log('Message received: \n '+ message.updateAt);
+          const {cid} = message
+          if (self.eventObserverMap[cid]) {
+            // if(cid === ConvPageData.convId) { // 当前聊天页的convID,
+              self.eventObserverMap[cid].cb(message)
+            // }
+          }
         });
     
         // 未读消息

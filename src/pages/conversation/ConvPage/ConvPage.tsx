@@ -2,7 +2,8 @@
  * Conversation Page
  * chat whit friend here
  */
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useMemo, useCallback} from 'react';
+import { TextMessage } from "leancloud-realtime";
 import { View,Text } from '@tarojs/components'
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 import LCClient from '@/scripts/LCClient'
@@ -19,37 +20,50 @@ const {ConvPageData, connect} = Store
 
 function ConvPage(props){
   const [convList, setConvList] = useState([])
-  const [convId, setConvId] = useState('')
+  const [currentConv, setCurrentConv] = useState(null)
+  const convId =  getCurrentInstance().router.params.convId
 
   useEffect(()=>{
-    let id =  getCurrentInstance().router.params.convId
-    if(!id){
-      return
-    }
-    setConvId(id)
-    // LCClient.addEventObserver(uuid(),convId, handleMessageReceived)
-    fetchHistory(convId)
-  }, [convId])
-  function handleMessageReceived(message){
-    setConvList(message)
-  }
-  async function fetchHistory(id){
-    try {
-      await LCClient.init()
-      const conv = await LCClient.IMClient.getConversation(id)
+    LCClient.init().then( async IMClient => {
+      const conv = await IMClient.getConversation(convId)
       if(!conv)return
+      setCurrentConv(conv)
+      fetchHistory(conv, convId)
+    })
+  }, [convId])
+
+  useEffect( // 这里和用useMemo啥区别呢?
+    () => {
+      // console.log('useMemo', convList)
+      function handleMessageReceived(message){
+        // console.log("convpage -- handle msg received")
+        setConvList([].concat(convList,message))
+      }
+      LCClient.addEventObserver(uuid(), convId, handleMessageReceived);
+    },
+    [convId, convList]
+  );
+  async function fetchHistory(conv,id){
+    try {
       const messages = await conv.queryMessages({
         limit:20
       })
       setConvList(messages)
-      
     } catch (error) {
       console.log(error)
     }
-    
   }
+  
+
   function sendMsg(v){
     console.log(v,'vvvv')
+    // 文本消息
+    let textMsg = new TextMessage(v)
+    currentConv.send(textMsg).then(msg => {
+      console.log('发送成功 --> ', msg)
+      // 发送成功后手动塞入到当前消息列表中
+      setConvList(convList.concat([msg]))
+    }).catch(console.error);
   }
 
   return (
