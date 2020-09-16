@@ -52,6 +52,7 @@ const config = {
   h5: {
     publicPath: '/',
     staticDirectory: 'static',
+    outputRoot: 'dist-h5',
     postcss: {
       autoprefixer: {
         enable: true,

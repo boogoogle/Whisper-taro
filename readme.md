@@ -26,3 +26,7 @@
     - 视频消息	-4
     - 位置消息	-5
     - 文件消息	-6
+
+
+### h5版本(master分支)部署在leancloud上
+  - [leancloud命令行工具](https://leancloud.cn/docs/leanengine_cli.html)
