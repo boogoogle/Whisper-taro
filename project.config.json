@@ -2,7 +2,7 @@
 	"miniprogramRoot": ".dist",
 	"projectname": "Whisper-taro",
 	"description": "Whisper",
-	"appid": "touristappid",
+	"appid": "wxfb083cfd0f2ab1ba",
 	"setting": {
 		"urlCheck": true,
 		"es6": false,

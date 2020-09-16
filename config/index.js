@@ -14,10 +14,13 @@ const config = {
   outputRoot: 'dist',
   plugins: [],
   defineConstants: {
+
   },
   alias: {
     // eslint-disable-next-line no-undef
-    '@': resolve(__dirname, '../src')
+    '@': resolve(__dirname, '../src'),
+    'leancloud-realtime': resolve(__dirname, '../src/libs/leancloud-realtime.js'),
+    'leancloud-storage': resolve(__dirname, '../src/libs/leancloud-storage.js'),
   },
   copy: {
     patterns: [
@@ -47,11 +50,22 @@ const config = {
           generateScopedName: '[name]__[local]___[hash:base64:5]'
         }
       }
+    },
+    webpackChain(chain) {
+      chain.merge({
+        // node: {
+        //   fs: 'empty',
+        //   net: 'empty',
+        //   tls: 'empty',
+        //   http2: 'empty'
+        // }
+      })
     }
   },
   h5: {
     publicPath: '/',
     staticDirectory: 'static',
+    outputRoot: 'dist-h5',
     postcss: {
       autoprefixer: {
         enable: true,

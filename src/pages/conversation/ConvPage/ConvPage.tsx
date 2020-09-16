@@ -74,12 +74,12 @@ function ConvPage(props){
 
   return (
     <View className='ConvPage-container'>
-      <AtNavBar
+      {/* <AtNavBar
         onClickLeftIcon={handleClickBack}
         color='#000'
         title='聊天详情'
         leftIconType='chevron-left'
-      />
+      /> */}
       <View className='msg-content'>
         {
           messageList.map(msg => <MessageRow message={msg} key={msg.id} />)

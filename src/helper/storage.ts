@@ -12,7 +12,7 @@ const setItem = (key:string, value:string | number): void => {
                 key: key,
                 data: value,
                 success: (res) => {
-                    console.log(res.data, 'wx.setStorage success')
+                    console.log(res, 'wx.setStorage success')
                 },
                 fail: err => {
                     console.log(err, 'wx.setStorage fail')

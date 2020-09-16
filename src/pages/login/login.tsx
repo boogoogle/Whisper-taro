@@ -1,4 +1,5 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useMemo} from 'react'
+import AV from 'leancloud-storage';
 import Taro from '@tarojs/taro'
 import {View} from '@tarojs/components'
 import storage from '@/helper/storage' 
@@ -12,72 +13,54 @@ const {UserData, connect} = Store
 
 
 function LoginPage(props) {
-    const [id, setId] = useState(props.id)
-    const [suggestId, setSuggestId] = useState('')
 
-    useEffect(() => {
-      if(props.id) {
-        setId(props.id)
-        return 
-      }
-      storage.getItem('id').then(id=>{
-        if(id) {
-          setId(id)
-        } 
+    const [canIUse, setCanIuse] = useState(false)
+    // 使用微信登录小程序账号
+    useMemo(()=>{
+      Taro.getSetting({
+        success (res){
+          if (res.authSetting['scope.userInfo']) {
+            setCanIuse(true)
+            // 已经授权，可以直接调用 getUserInfo 获取头像昵称
+            Taro.getUserInfo({
+              success: ({userInfo}) => {
+                // console.log(userInfo) // 登录用户基础信息...
+                // 使用LeanCloud账号系统登录
+                AV.User.loginWithMiniApp().then(user => {
+                  // user.set(userInfo).save().then(savedUser => {
+                  //   console.log(savedUser)
+                  // })
+                  LCClient.init()
+                  Taro.navigateTo({
+                    url: '/pages/home/home'
+                  })
+                }).catch(console.error);
+
+              }
+            })
+          }
+        }
       })
-    }, [props.id]);
+    },[])
 
-    function confirm(){
-      if(!id) {
-        Taro.atMessage({
-          message: '请输入通行证',
-          type: 'error'
-        })
-        return
-      }
-      props.updateId(id)
-      storage.setItem('id', id)
-      LCClient.init()
-
-      Taro.navigateTo({
-        url: '/pages/home/home'
-      })
-    }
-    function handleChange(v){
-      setId(v)
-    }
-    function suggest(v){
-      setId(v)
+    function bindgetuserinfo(u){
+      console.log(u,'uuu')
+      const info = u.detail.userInfo
     }
 
     return (
       <View className='login-page'>
-        <AtMessage />
-        <AtNoticebar marquee>输入你的通行证,当然您可以随意输入,不过那样的话,你就收不到自己的消息了/狗头</AtNoticebar>
         <View className='login__form'>
-          <AtInput
-            name='value'
-            type='text'
-            placeholder='输入通行证'
-            value={id}
-            onChange={handleChange}
-          />
-
-          <View className='login__suggest'>
-            <AtInput
-              disabled
-              name='suggestValue'
-              type='text'
-              placeholder='建议ID'
-              value={suggestId}
-              onChange={handleChange}
-            />
-            <AtButton type='secondary' size='normal' circle 
-              onClick={suggest}
-            >
-            上次</AtButton>
-          </View>
-    <AtButton type='primary' onClick={confirm}>准备好了</AtButton>
+          { 
+          canIUse ? 
+          '' :
+          <AtButton 
+            className='mt10' 
+            type='secondary' 
+            openType='getUserInfo'
+            onGetUserInfo={bindgetuserinfo}
+          >微信登录</AtButton>
+          }
         </View>
       </View>
     )

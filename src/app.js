@@ -3,6 +3,8 @@ import 'taro-ui/dist/style/index.scss'
 import LCClient from '@/scripts/LCClient'
 
 import './app.scss'
+import './styles/common.scss'
+
 
 class App extends Component {
 

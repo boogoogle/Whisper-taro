@@ -1,4 +1,5 @@
 import {Event} from 'leancloud-realtime'
+import AV from 'leancloud-storage';
 import Taro from '@tarojs/taro'
 import Store from '@/store'
 import storage from '@/helper/storage' 
@@ -36,15 +37,17 @@ class LCClient  {
       }
     }
     async init(){
-      console.log("page revoke LCCLient.init -->->", arguments)
+      // console.log("page revoke LCCLient.init -->->", arguments)
         if (this.IMClient) {
           return Promise.resolve(this.IMClient)
         }
 
-        const id = await storage.getItem('id')
+        const user = AV.User.current()
+        const id = user.get('username') // leancloud自动登录时设置了一个username
+
         if(id) {
           const instance = await YooRealtime.createIMClient(id)
-          console.log(instance)
+          console.log('IMClient',instance)
           this.IMClient = instance
           this.reveiveMessage()
           UserData.update('id', id)
