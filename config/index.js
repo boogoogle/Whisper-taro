@@ -24,6 +24,7 @@ const config = {
   },
   copy: {
     patterns: [
+      { from: 'imgs/', to: 'dist/imgs/' }
     ],
     options: {
     }

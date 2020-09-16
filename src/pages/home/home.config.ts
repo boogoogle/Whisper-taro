@@ -1,4 +1,4 @@
 export default {
-    navigationBarTitleText: 'Home'
+    navigationBarTitleText: '会话列表'
   }
   

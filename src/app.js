@@ -7,7 +7,6 @@ import './styles/common.scss'
 
 
 class App extends Component {
-
   componentDidMount () {
     console.log('App.js did mount')
     LCClient.init()

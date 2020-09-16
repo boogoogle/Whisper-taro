@@ -11,9 +11,7 @@ import Store from '@/store'
 import MessageRow from '@/components/message-row'
 import InputBox from '@/components/input-box'
 
-import { AtNavBar } from 'taro-ui'
 import './ConvPage.scss';
-
 
 const {ConvPageData, connect} = Store
 
@@ -25,7 +23,11 @@ function ConvPage(props){
     const convId =  getCurrentInstance().router.params.convId
     LCClient.init().then( async IMClient => {
       const conv = await IMClient.getConversation(convId)
+      console.log(conv,'----')
       if(!conv)return
+      wx.setNavigationBarTitle({
+        title: conv.get('name')
+      })
       setCurrentConv(conv)
       fetchHistory(conv, convId)
     })
@@ -56,7 +58,6 @@ function ConvPage(props){
   
 
   function sendMsg(v){
-    console.log(v,'vvvv')
     // 文本消息
     let textMsg = new TextMessage(v)
     currentConv.send(textMsg).then(msg => {

@@ -1,0 +1,10 @@
+.my-container {
+    // 组件的最外层类名, 保证作用域
+    .profile-row {
+        display: flex;
+        align-items: center;
+    }
+    .at-avatar{
+        border: 1px solid #333;
+    }
+}

@@ -1,5 +1,5 @@
-import {Event} from 'leancloud-realtime'
-import AV from 'leancloud-storage';
+import {Event, IMClient} from 'leancloud-realtime'
+import AV, {} from 'leancloud-storage';
 import Taro from '@tarojs/taro'
 import Store from '@/store'
 import storage from '@/helper/storage' 
@@ -14,11 +14,11 @@ class LCClient  {
     storedConversations: []
     currentConversation: object
     eventObserverMap: [] = []
-    IMClient:  object | null = null // IMClient
+    IMClient:  IMClient | null = null // IMClient
 
-    constructor(){
-      console.log("-----> LCCClient constructor")
-    }
+    // constructor(){
+    //   console.log("-----> LCCClient constructor")
+    // }
 
     // 会话页面使用 ConvPage
     addEventObserver(convId:string, cb) {
@@ -31,10 +31,16 @@ class LCClient  {
     }
     // 聊天列表页面使用 Home
     addConversationObserver(cb){
-      console.log('addConversationObserver')
+      // console.log('addConversationObserver')
       this.eventObserverMap['conversationList'] = {
         cb,
       }
+    }
+    gotoLogin(){
+      console.log('gotoLogin')
+      Taro.navigateTo({
+        url: '/pages/login/login'
+      })
     }
     async init(){
       // console.log("page revoke LCCLient.init -->->", arguments)
@@ -43,8 +49,18 @@ class LCClient  {
         }
 
         const user = AV.User.current()
-        const id = user.get('username') // leancloud自动登录时设置了一个username
+        if (!user)  {
+          this.gotoLogin()
+          return
+        }
+        const authenticated = await user.isAuthenticated()
+        
+        if (!authenticated) {
+          this.gotoLogin()
+        }
+        console.log( 'AV.User 已登录----',authenticated)
 
+        const id = user.get('username') // leancloud自动登录时设置了一个username
         if(id) {
           const instance = await YooRealtime.createIMClient(id)
           console.log('IMClient',instance)
@@ -53,9 +69,7 @@ class LCClient  {
           UserData.update('id', id)
           return Promise.resolve(this.IMClient)
         } else {
-          Taro.navigateTo({
-            url: '/pages/login/login'
-          })
+          this.gotoLogin()
         }
     }
     reveiveMessage(){

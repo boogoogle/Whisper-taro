@@ -11,6 +11,7 @@ function InputBox(props) {
     }
     function send(){
         props.onSubmit(value)
+        setValue('')
     }
     return (
         <View className='input-box-wrapper'>

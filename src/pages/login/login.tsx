@@ -17,6 +17,7 @@ function LoginPage(props) {
     const [canIUse, setCanIuse] = useState(false)
     // 使用微信登录小程序账号
     useMemo(()=>{
+      console.log('login usememo-----')
       Taro.getSetting({
         success (res){
           if (res.authSetting['scope.userInfo']) {
@@ -26,16 +27,7 @@ function LoginPage(props) {
               success: ({userInfo}) => {
                 // console.log(userInfo) // 登录用户基础信息...
                 // 使用LeanCloud账号系统登录
-                AV.User.loginWithMiniApp().then(user => {
-                  // user.set(userInfo).save().then(savedUser => {
-                  //   console.log(savedUser)
-                  // })
-                  LCClient.init()
-                  Taro.navigateTo({
-                    url: '/pages/home/home'
-                  })
-                }).catch(console.error);
-
+                loginAV(userInfo)
               }
             })
           }
@@ -43,9 +35,23 @@ function LoginPage(props) {
       })
     },[])
 
-    function bindgetuserinfo(u){
-      console.log(u,'uuu')
-      const info = u.detail.userInfo
+    function loginAV(userInfo){
+      AV.User.loginWithMiniApp().then(user => {
+        user.set(userInfo).save().then(savedUser => {
+          // console.log(savedUser)
+        })
+        LCClient.init()
+        Taro.switchTab({
+          url: '/pages/home/home'
+        })
+      }).catch(console.error);
+    }
+
+    function bindgetuserinfo(e){
+      if(e.detail.userInfo) {
+        setCanIuse(true)
+        loginAV(e.detail.userInfo)
+      }
     }
 
     return (

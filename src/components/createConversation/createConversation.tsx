@@ -22,12 +22,10 @@ function CreateConversation(){
   },[])
 
   function createConv(){
-    console.log(friendId, 'f')
     storage.setItem('friendId', friendId)
     LCClient.IMClient.createConversation({
       members: [friendId],
       name: LCClient.IMClient.id + '&' + friendId
-      // ttl: this.state.ttl
     }).then(conversation => {
       LCClient.currentConversation = conversation
       console.log(conversation)
@@ -46,6 +44,7 @@ function CreateConversation(){
 
   return (
     <View className='createConversation-container'>
+      
       <AtInput
         name='friendId'
         type='text'
@@ -53,7 +52,7 @@ function CreateConversation(){
         value={friendId}
         onChange={(v) => setFriendId(v)}
       />
-      <AtButton onClick={createConv}>+</AtButton>
+      <AtButton onClick={createConv}>发起</AtButton>
     </View>
   );
 }

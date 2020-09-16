@@ -12,8 +12,6 @@ import {AV_APP_CONFIG} from './config'
 
 const adapters = require('@/libs/leancloud-adapters-weapp.js'); // 这个不能用import ,funk, 因为它不是用esMoule写的
 
-console.log(adapters)
-
 AV.setAdapters(adapters); // 为存储 SDK 设置 adapters
 setAdapters(adapters);    // 为即时通讯 SDK 设置 adapters
 
