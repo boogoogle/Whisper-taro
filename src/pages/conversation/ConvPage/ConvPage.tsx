@@ -4,8 +4,8 @@
  */
 import React, {useEffect, useState, useMemo, useCallback} from 'react';
 import { TextMessage } from "leancloud-realtime";
-import { View,Text } from '@tarojs/components'
-import Taro, { getCurrentInstance } from '@tarojs/taro'
+import { View, ScrollView } from '@tarojs/components'
+import Taro, { getCurrentInstance,useDidShow, useReachBottom } from '@tarojs/taro'
 import LCClient from '@/scripts/LCClient'
 import Store from '@/store'
 import MessageRow from '@/components/message-row'
@@ -19,12 +19,13 @@ const {ConvPageData, connect} = Store
 function ConvPage(props){
   const [messageList, setMessageList] = useState([])
   const [currentConv, setCurrentConv] = useState(null)
+  const [scrollTop, setScrollTop] = useState(0)
+  const [scrollViewHeigh, setScrollViewHeight] = useState(0)
 
   useMemo(()=>{
     const convId =  getCurrentInstance().router.params.convId
     LCClient.init().then( async IMClient => {
       const conv = await IMClient.getConversation(convId)
-      console.log(conv,'----')
       if(!conv)return
       wx.setNavigationBarTitle({
         title: conv.get('name')
@@ -34,12 +35,25 @@ function ConvPage(props){
     })
   },[])
 
+
+
+  useEffect(()=>{
+    const l = messageList.length
+    if(l === 0) return
+    Taro.nextTick(() => {
+      const query = Taro.createSelectorQuery()
+      query.select('#msg-content').boundingClientRect()
+      query.exec(function(res){
+        setScrollViewHeight(res[0].height)
+      })
+      setScrollTop(40 * l)
+    })
+  },[messageList])
+
   useEffect( // 这里和用useMemo啥区别呢?
     () => {
       const convId =  getCurrentInstance().router.params.convId
-      // console.log('useMemo', messageList)
       function handleMessageReceived(message){
-        // console.log("convpage -- handle msg received")
         setMessageList([].concat(messageList,message))
       }
       LCClient.addEventObserver(convId, handleMessageReceived);
@@ -62,7 +76,6 @@ function ConvPage(props){
     // 文本消息
     let textMsg = new TextMessage(v)
     currentConv.send(textMsg).then(msg => {
-      console.log('发送成功 --> ', msg)
       // 发送成功后手动塞入到当前消息列表中
       setMessageList(messageList.concat([msg]))
     }).catch(console.error);
@@ -82,10 +95,23 @@ function ConvPage(props){
         title='聊天详情'
         leftIconType='chevron-left'
       /> */}
-      <View className='msg-content'>
-        {
-          messageList.map(msg => <MessageRow message={msg} key={msg.id} />)
-        }
+      
+      <View id='msg-content' className='msg-content'>
+        <ScrollView
+          style={{height: scrollViewHeigh}}
+          scrollY 
+          scrollTop={scrollTop} 
+        >
+          {
+            messageList.map((msg,idx) => {
+              return (
+                <View className={`msg-anchor-${idx}`} key={msg.id}>
+                    <MessageRow message={msg} />
+                </View>
+              )
+            })
+          }
+        </ScrollView>
       </View>
       <InputBox onSubmit={sendMsg}></InputBox>
       <ButtomSafeBarrier />

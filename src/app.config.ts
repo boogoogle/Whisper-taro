@@ -1,7 +1,7 @@
 export default {
   pages: [
-    'pages/My/My',
     'pages/home/home',
+    'pages/My/My',
     'pages/Contacts/Contacts',
     'pages/login/login',
     'pages/conversation/ConvPage/ConvPage',

@@ -11,8 +11,7 @@ import { View,Text } from '@tarojs/components'
      useMemo(()=>{
         Taro.getSystemInfo({
             success: res=>{
-                console.log(res)
-                if(/iPhone X/.test(res.model)) {
+                if(/iPhone X/i.test(res.model)) {
                     const bottomH = 34
                     setH(bottomH)
                 }
