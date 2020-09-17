@@ -10,6 +10,7 @@ import LCClient from '@/scripts/LCClient'
 import Store from '@/store'
 import MessageRow from '@/components/message-row'
 import InputBox from '@/components/input-box'
+import ButtomSafeBarrier from '@/components/ButtomSafeBarrier'
 
 import './ConvPage.scss';
 
@@ -87,6 +88,7 @@ function ConvPage(props){
         }
       </View>
       <InputBox onSubmit={sendMsg}></InputBox>
+      <ButtomSafeBarrier />
     </View>
   );
 }

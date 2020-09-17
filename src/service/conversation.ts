@@ -27,6 +27,6 @@ export const createConv = (friend) => {
         Taro.navigateTo({
             url: `/pages/conversation/ConvPage/ConvPage?convId=${conversation.id}`
         })
-        return conversation.send(new TextMessage(`Hi, I am ${nickName}`))
+        return conversation.send(new TextMessage(`Hi, ${nickName} 又来了😁`))
     })
 }

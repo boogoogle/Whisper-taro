@@ -1,58 +1,48 @@
 import React, {useState, useMemo} from 'react';
 import { View } from '@tarojs/components'
-import Taro from '@tarojs/taro'
 import { AtButton, AtInput} from 'taro-ui'
-import { TextMessage } from "leancloud-realtime";
 import storage from '@/helper/storage' 
-import LCClient from '@/scripts/LCClient'
+import {createConv} from '@/service/conversation'
 import './createConversation.scss';
 
-const {IMClient} = LCClient
-
 function CreateConversation(){
-
   const [friendId, setFriendId] = useState('')
+  const [placeHolder, setPlaceHolder] = useState('')
 
   useMemo(()=>{
     console.log("useEffect")
     storage.getItem('friendId').then(id => {
       if(!id)return
-      setFriendId(id)
+      setPlaceHolder(id)
     })
   },[])
 
-  function createConv(){
-    storage.setItem('friendId', friendId)
-    LCClient.IMClient.createConversation({
-      members: [friendId],
-      name: LCClient.IMClient.id + '&' + friendId
-    }).then(conversation => {
-      LCClient.currentConversation = conversation
-      console.log(conversation)
-      Taro.navigateTo({
-          url: `/pages/conversation/ConvPage/ConvPage?convId=${conversation.id}`
-      })
-      return conversation.send(new TextMessage(`Hi, I am ${LCClient.IMClient.id}`))
-    }).then(() => {
-        // Taro.navigateTo({
-        //     url: '/pages/chat/chat'
-        // })
-    })
+  function create(){
+    // if(!friendId) {
+    //   wx.showToast({
+    //     title: '请输入好友邮箱',
+    //     duration: 500
+    //   })
+    //   return
+    // }
+    const id = friendId || placeHolder
+    storage.setItem('friendId', id)
+    const friend = {
+        email: id
+    }
+    createConv(friend)
   }
-
-
 
   return (
     <View className='createConversation-container'>
-      
       <AtInput
         name='friendId'
         type='text'
-        placeholder='好友ID'
+        placeholder={placeHolder}
         value={friendId}
         onChange={(v) => setFriendId(v)}
       />
-      <AtButton onClick={createConv}>发起</AtButton>
+      <AtButton type='primary' size='normal' onClick={create}>发起会话</AtButton>
     </View>
   );
 }
