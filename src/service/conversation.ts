@@ -16,7 +16,8 @@ export const sendMessage = (conv,message) => {
  */
 export const createConv = (friend) => {
     console.log(friend,'----')
-    const nickName = AV.User.current().get('nickName');
+    const currentUser = AV.User.current()
+    const nickName = currentUser.get('nickName');
     const friendId = friend.username || friend.email // 微信用username作为唯一标识, 测试账号用email
     const convName = `${nickName}&${friend.nickName || friend.email}`
     LCClient.IMClient.createConversation({
@@ -27,6 +28,18 @@ export const createConv = (friend) => {
         Taro.navigateTo({
             url: `/pages/conversation/ConvPage/ConvPage?convId=${conversation.id}`
         })
-        return conversation.send(new TextMessage(`Hi, ${nickName} 又来了😁`))
+
+        const rContacts = currentUser.get('recentContacts') || []
+        if(rContacts.indexOf(friendId) == -1) {
+            if(rContacts.length == 5) {
+                rContacts.shift()
+            }
+            currentUser.set('recentContacts',rContacts.push(friendId))
+            currentUser.save().then(u=>{
+                // console.log(u.get('recentContacts'))
+            })
+        }
+        
+        // return conversation.send(new TextMessage(`Hi, ${nickName} 又来了😁`))
     })
 }

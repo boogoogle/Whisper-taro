@@ -1,3 +1,8 @@
 .Contacts-container {
     // 组件的最外层类名, 保证作用域
+    background-color: #f4f5f6;
+    .section {
+        border-radius: 10px;
+        padding-top: 30px;
+    }
 }
