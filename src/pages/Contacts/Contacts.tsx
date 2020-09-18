@@ -38,7 +38,7 @@ function Contacts(){
       </View>
       <View className='section'>
         <AtCard 
-          title='最近联系人'
+          title='联系过'
           extra='最近5个'
         >
           <AtList>

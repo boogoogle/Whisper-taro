@@ -1,6 +1,7 @@
 export default {
   pages: [
     'pages/Contacts/Contacts',
+
     'pages/home/home',
     'pages/My/My',
     'pages/login/login',

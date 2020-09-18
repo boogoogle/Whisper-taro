@@ -3,8 +3,11 @@ import Taro from '@tarojs/taro'
 import { View, Button, Text } from '@tarojs/components'
 import LCClient from '@/scripts/LCClient'
 import { AtNavBar, AtList, AtListItem} from 'taro-ui'
+import Store from '@/store'
+import {getLocalConvList} from '@/service/conversation'
+import bff from '@/api/bff'
 import './home.scss'
-import Store from '../../store'
+
 
 const {UserData, connect} = Store
 
@@ -21,9 +24,20 @@ function Home(props){
         }
       }
 
+
+      // 从本地缓存中拿到存储的最近conversastionId
+      // 查询后显示
+      useEffect(()=>{
+        getLocalConvList().then(arr=>{
+          bff.conversation.queryConversations(arr).then(res => {
+            setConvList(res)
+          })
+        })
+      },[])
+
       useMemo(
         () => {
-          console.log('useMemo', convList)
+          // console.log('useMemo', convList)
           function handleMessageReceived(convercations){
             console.log("convpage -- handle msg received")
 
@@ -62,13 +76,12 @@ function Home(props){
                                 key={cv.id}
                                 arrow='right'
                                 note={cv.lastMessage.text}
-                                title={cv.members.join('&')}
+                                title={cv.name}
                                 extraText=''
                                 onClick={()=>handleListItemClick(cv)}
                               />
                          )})
                     }
-                  
                 </AtList>
               </View>
           </View>
