@@ -7,10 +7,10 @@ import './message-row.scss'
 
 function MessageRow(props){
     const {message} = props
-    const isSelf = message.from === Store.UserData.id
+    console.log(message,'0000')
     return (
         <View className='message-row-container'>
-            <View className={"at-row " + (isSelf ? 'flex-reverse' : '')}>
+            <View className='at-row'>
                 <View className='at-col-2'>
                     <AtAvatar size='small' circle text={message.from} ></AtAvatar>
                 </View>

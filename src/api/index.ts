@@ -9,8 +9,25 @@ export const fetchAllUsers = () => {
 }
 
 
-export const getConversationHistoryById = (id: string) => {
+export const getConversationHistoryById = (id: string, params?:object) => {
     return Request.get(`conversations/${id}/messages`).then(res => {
-        return res
+        let arr = []
+        if(res && res.length) {
+            arr = res.map( m=> {
+                let text = ''
+                if(m.data) {
+                    let d = JSON.parse(m.data)
+                    text = d._lctext
+                }
+
+                return {
+                    convId: m['conv-id'],
+                    msgId: m['msg-id'],
+                    text: text,
+                    from: m['from']
+                }
+            })
+        }
+        return arr
     })
 }

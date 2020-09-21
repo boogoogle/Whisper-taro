@@ -6,6 +6,7 @@ export default {
     'pages/My/My',
     'pages/login/login',
     'pages/conversation/ConvPage/ConvPage',
+    'pages/conversation/ConvPage4OtherPairs/ConvPage4OtherPairs'
   ],
   window: {
     backgroundTextStyle: 'light',

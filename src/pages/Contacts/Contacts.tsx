@@ -1,6 +1,6 @@
 import React, {useMemo, useState, useEffect} from 'react';
 import { View, Text} from '@tarojs/components'
-import Taro from '@tarojs/taro'
+import Taro, {useDidShow} from '@tarojs/taro'
 import { AtList, AtListItem, AtCard } from 'taro-ui'
 import {fetchAllUsers} from '@/api'
 import {createConv} from '@/service/conversation'
@@ -17,12 +17,11 @@ function Contacts(){
     })
   },[])
 
-  useEffect(()=>{
-    // setRecentContacts(arr)
+  useDidShow(() => {
     bff.user.getUserRecentContacts().then(res=>{
       setRecentContacts(res)
     })
-  }, [])
+  })
 
   return (
     <View className='Contacts-container'>

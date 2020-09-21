@@ -2,15 +2,16 @@
  * Conversation Page
  * chat whit friend here
  */
-import React, {useEffect, useState, useMemo, useCallback} from 'react';
+import React, {useEffect, useState, useMemo} from 'react';
 import { TextMessage } from "leancloud-realtime";
 import { View, ScrollView } from '@tarojs/components'
-import Taro, { getCurrentInstance,useDidShow, useReachBottom } from '@tarojs/taro'
+import Taro, { getCurrentInstance,useDidShow } from '@tarojs/taro'
 import LCClient from '@/scripts/LCClient'
 import Store from '@/store'
 import MessageRow from '@/components/message-row'
 import InputBox from '@/components/input-box'
 import ButtomSafeBarrier from '@/components/ButtomSafeBarrier'
+
 
 import './ConvPage.scss';
 
@@ -23,7 +24,7 @@ function ConvPage(props){
   const [scrollViewHeigh, setScrollViewHeight] = useState(0)
 
   useMemo(()=>{
-    const convId =  getCurrentInstance().router.params.convId
+    const convId = getCurrentInstance().router.params.convId
     LCClient.init().then( async IMClient => {
       const conv = await IMClient.getConversation(convId)
       if(!conv)return
@@ -34,8 +35,6 @@ function ConvPage(props){
       fetchHistory(conv, convId)
     })
   },[])
-
-
 
   useEffect(()=>{
     const l = messageList.length
@@ -89,13 +88,6 @@ function ConvPage(props){
 
   return (
     <View className='ConvPage-container'>
-      {/* <AtNavBar
-        onClickLeftIcon={handleClickBack}
-        color='#000'
-        title='聊天详情'
-        leftIconType='chevron-left'
-      /> */}
-      
       <View id='msg-content' className='msg-content'>
         <ScrollView
           style={{height: scrollViewHeigh}}

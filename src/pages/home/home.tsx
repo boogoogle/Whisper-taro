@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import Taro from '@tarojs/taro'
+import Taro,{useDidShow} from '@tarojs/taro'
 import { View, Button, Text } from '@tarojs/components'
 import LCClient from '@/scripts/LCClient'
 import { AtNavBar, AtList, AtListItem} from 'taro-ui'
@@ -24,16 +24,15 @@ function Home(props){
         }
       }
 
-
-      // 查询后显示
-      useEffect(()=>{
+      useDidShow(() => {
+        console.log('componentDidShow')
         getLocalConvList().then(arr => {
           bff.conversation.queryConversationsByIds(arr).then(res => {
-            // console.log(res, '-=-=-=-=')
+            console.log(res, '-=-=-=-=')
             setConvList(res)
           })
         })
-      },[])
+      })
 
       useMemo(
         () => {
@@ -72,6 +71,7 @@ function Home(props){
                     {
                       convList.map(cv => {
                          return (
+                              cv ?
                               <AtListItem 
                                 key={cv.id}
                                 arrow='right'
@@ -79,7 +79,8 @@ function Home(props){
                                 title={cv.name}
                                 extraText=''
                                 onClick={()=>handleListItemClick(cv)}
-                              />
+                              /> :
+                              ''
                          )})
                     }
                 </AtList>

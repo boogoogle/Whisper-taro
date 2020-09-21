@@ -29,13 +29,24 @@ const user = {
 const conversation = {
     // 传入conversation的id数组, 获取conversation详情
     async queryConversationsByIds(arr: Array<string>){
+        if(arr && arr.length > 2) {
+            arr = [arr[0], arr[1]]
+        }
         return Promise.all(arr.map(async id=>{
-            const conv = await LCClient.IMClient.getConversation(id)
-            const lastM = await conv.queryMessages({
-                limit: 1 // 获取最后一条消息
-            })
-            conv.lastMessage = lastM[0]
-            return conv
+            try {
+                const conv = await LCClient.IMClient.getConversation(id)
+                if(!conv){
+                    return null
+                }
+                const lastM = await conv.queryMessages({
+                    limit: 1 // 获取最后一条消息
+                })
+                conv.lastMessage = lastM[0]
+                return conv
+            } catch (error) {
+                console.log(error)
+            }
+            
         }))
     },
 
@@ -55,17 +66,8 @@ const conversation = {
                 // console.log(history, 'history----')
                 conv.recentMessages = history
                 if(history.length) {
-                    let text = ''
-                    if(history[0].data) {
-                        let d = JSON.parse(history[0].data)
-                        text = d._lctext
-                    }
-                    console.log(text, 'text')
-                    conv.lastMessageInHistory = {
-                        convId: history[0]['conv-id'],
-                        msgId: history[0]['msg-id'],
-                        text: text,
-                    }
+                    
+                    conv.lastMessageInHistory = history[0]
                 }
                 
                 return conv

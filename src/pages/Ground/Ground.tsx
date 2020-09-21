@@ -1,6 +1,6 @@
 import React, {useState, useMemo, useEffect} from 'react';
 import { View, } from '@tarojs/components'
-import Taro from '@tarojs/taro'
+import Taro,{useDidShow}  from '@tarojs/taro'
 import {AtList, AtListItem} from 'taro-ui'
 import bff from '@/api/bff'
 import './Ground.scss';
@@ -25,16 +25,15 @@ function Ground(){
 
     const [convList, setConvList] = useState([])
 
-    useEffect(()=>{
+    useDidShow(()=>{
         bff.conversation.getConversationsFromRestApi().then(res=>{
             setConvList(res)
         })
-        
-    }, [])
+    })
 
     function handleListItemClick(conversation){
         Taro.navigateTo({
-          url: `/pages/conversation/ConvPage/ConvPage?convId=${conversation.id}`
+          url: `/pages/conversation/ConvPage4OtherPairs/ConvPage4OtherPairs?convId=${conversation.id}`
         })
     }
     return (
