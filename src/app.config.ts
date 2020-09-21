@@ -1,8 +1,8 @@
 export default {
   pages: [
     'pages/Contacts/Contacts',
-
     'pages/home/home',
+    'pages/Ground/Ground',
     'pages/My/My',
     'pages/login/login',
     'pages/conversation/ConvPage/ConvPage',
@@ -21,6 +21,11 @@ export default {
         pagePath: 'pages/home/home',
         iconPath: './imgs/msg-grey.png',
         selectedIconPath: './imgs/msg.png'
+      },
+      {
+        pagePath: 'pages/Ground/Ground',
+        iconPath: './imgs/earth-grey.png',
+        selectedIconPath: './imgs/earth.png'
       },
       {
         pagePath: 'pages/Contacts/Contacts',

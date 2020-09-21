@@ -11,7 +11,6 @@ function My(){
   const [profile, setProfile] = useState({})
   useEffect(() => {
     const user = AV.User.current()
-    console.log(user, '====')
     const p = {
       avatarUrl: user.get('avatarUrl'),
       nickName: user.get('nickName')

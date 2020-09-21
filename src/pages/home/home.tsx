@@ -25,11 +25,11 @@ function Home(props){
       }
 
 
-      // 从本地缓存中拿到存储的最近conversastionId
       // 查询后显示
       useEffect(()=>{
-        getLocalConvList().then(arr=>{
-          bff.conversation.queryConversations(arr).then(res => {
+        getLocalConvList().then(arr => {
+          bff.conversation.queryConversationsByIds(arr).then(res => {
+            // console.log(res, '-=-=-=-=')
             setConvList(res)
           })
         })
