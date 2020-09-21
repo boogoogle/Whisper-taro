@@ -1,10 +1,10 @@
-import React, {useState, useEffect, useMemo} from 'react'
+import React, {useState, useMemo} from 'react'
 import AV from 'leancloud-storage';
-import Taro from '@tarojs/taro'
+import Taro, { useDidShow } from '@tarojs/taro'
 import {View} from '@tarojs/components'
-import storage from '@/helper/storage' 
 import LCClient from '@/scripts/LCClient'
-import { AtButton,AtNoticebar,AtInput,AtMessage } from 'taro-ui'
+import { AtButton,AtInput} from 'taro-ui'
+import generateName from '@/helper/getNames'
 import './login.scss'
 
 import Store from '../../store'
@@ -15,8 +15,11 @@ const {UserData, connect} = Store
 function LoginPage(props) {
 
     const [canIUse, setCanIuse] = useState(false)
+    const [placeHolder, setPlaceHolder] = useState('')
+    const [displayName, setDisplayName] = useState('')
+
     // 使用微信登录小程序账号
-    useMemo(()=>{
+    useDidShow(()=>{
       console.log('login usememo-----')
       Taro.getSetting({
         success (res){
@@ -33,16 +36,21 @@ function LoginPage(props) {
           }
         }
       })
-    },[])
+    })
+
+    useDidShow(()=>{
+      setPlaceHolder(generateName())
+    })
 
     function loginAV(userInfo){
       AV.User.loginWithMiniApp().then(user => {
+        userInfo.displayName = displayName || placeHolder
         user.set(userInfo).save().then(savedUser => {
           // console.log(savedUser)
         })
         LCClient.init()
         Taro.switchTab({
-          url: '/pages/home/home'
+          url: '/pages/Ground/Ground'
         })
       }).catch(console.error);
     }
@@ -60,12 +68,25 @@ function LoginPage(props) {
           { 
           canIUse ? 
           '' :
-          <AtButton 
-            className='mt10' 
-            type='secondary' 
-            openType='getUserInfo'
-            onGetUserInfo={bindgetuserinfo}
-          >微信登录</AtButton>
+
+            <View>
+            <AtButton 
+              className='mt10' 
+              type='secondary' 
+              openType='getUserInfo'
+              onGetUserInfo={bindgetuserinfo}
+            >微信登录(使用下方昵称)</AtButton>
+            <View>
+              <AtInput
+                name='displayName'
+                type='text'
+                placeholder={placeHolder}
+                value={displayName}
+                onChange={(v) => setDisplayName(v)}
+              />
+
+            </View>
+          </View>
           }
         </View>
       </View>

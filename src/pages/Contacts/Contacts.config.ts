@@ -1,4 +1,4 @@
 export default {
-    navigationBarTitleText: '找人'
+    navigationBarTitleText: 'Contact'
 }
   

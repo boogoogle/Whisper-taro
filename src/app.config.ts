@@ -1,10 +1,10 @@
 export default {
   pages: [
+    'pages/login/login',
     'pages/Contacts/Contacts',
     'pages/home/home',
     'pages/Ground/Ground',
     'pages/My/My',
-    'pages/login/login',
     'pages/conversation/ConvPage/ConvPage',
     'pages/conversation/ConvPage4OtherPairs/ConvPage4OtherPairs'
   ],
