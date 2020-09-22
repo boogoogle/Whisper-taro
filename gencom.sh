@@ -21,7 +21,7 @@ done
 # 修改文件名
 mv com.scss $NAME.scss
 mv com.tsx $NAME.tsx
-mv com.config.ts $NAME.config.tsx
+mv com.config.ts $NAME.config.ts
 
 
 echo "the com is --> $NAME -- $PWD"

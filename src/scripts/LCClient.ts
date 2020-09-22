@@ -3,7 +3,9 @@ import AV, {} from 'leancloud-storage';
 import Taro from '@tarojs/taro'
 import Store from '@/store'
 import storage from '@/helper/storage' 
+import {updateLocalConvList} from '@/service/conversation'
 import {YooRealtime} from './avInit'
+
 
 
 const {UserData, ConvPageData} = Store
@@ -15,10 +17,6 @@ class LCClient  {
     currentConversation: object
     eventObserverMap: [] = []
     IMClient:  IMClient | null = null // IMClient
-
-    // constructor(){
-    //   console.log("-----> LCCClient constructor")
-    // }
 
     // 会话页面使用 ConvPage
     addEventObserver(convId:string, cb) {
@@ -85,9 +83,17 @@ class LCClient  {
         // 未读消息
         this.IMClient.on(Event.UNREAD_MESSAGES_COUNT_UPDATE, function(conversations) {
             // const total = conversations ? conversations.length : 0
-            // console.log(conversations)
+            console.log(conversations.length, "个未读消息")
             self.eventObserverMap['conversationList'].cb(conversations)
-            
+            updateLocalConvList(conversations)
+            setTimeout(()=>{
+              Taro.showTabBarRedDot({
+                index: 0,
+                complete: (e)=>{
+                  console.log(e)
+                }
+              })
+            }, 1000)
         });
     }
 }

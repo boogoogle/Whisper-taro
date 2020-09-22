@@ -3,7 +3,6 @@
  * chat whit friend here
  */
 import React, {useEffect, useState, useMemo} from 'react';
-import { TextMessage } from "leancloud-realtime";
 import { View, ScrollView } from '@tarojs/components'
 import Taro, { getCurrentInstance,useDidShow } from '@tarojs/taro'
 import LCClient from '@/scripts/LCClient'
@@ -28,7 +27,7 @@ function ConvPage(props){
     LCClient.init().then( async IMClient => {
       const conv = await IMClient.getConversation(convId)
       if(!conv)return
-      wx.setNavigationBarTitle({
+      Taro.setNavigationBarTitle({
         title: conv.get('name')
       })
       setCurrentConv(conv)
@@ -71,10 +70,8 @@ function ConvPage(props){
   }
   
 
-  function sendMsg(v){
-    // 文本消息
-    let textMsg = new TextMessage(v)
-    currentConv.send(textMsg).then(msg => {
+  function sendMsg(IMMessage){
+    currentConv.send(IMMessage).then(msg => {
       // 发送成功后手动塞入到当前消息列表中
       setMessageList(messageList.concat([msg]))
     }).catch(console.error);

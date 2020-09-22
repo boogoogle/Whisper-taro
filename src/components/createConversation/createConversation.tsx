@@ -18,13 +18,6 @@ function CreateConversation(){
   },[])
 
   function create(){
-    // if(!friendId) {
-    //   wx.showToast({
-    //     title: '请输入好友邮箱',
-    //     duration: 500
-    //   })
-    //   return
-    // }
     const id = friendId || placeHolder
     storage.setItem('friendId', id)
     const friend = {

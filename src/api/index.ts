@@ -31,3 +31,8 @@ export const getConversationHistoryById = (id: string, params?:object) => {
         return arr
     })
 }
+
+
+export const uploadFile = () => {
+    
+}

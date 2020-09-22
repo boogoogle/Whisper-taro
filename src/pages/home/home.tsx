@@ -25,12 +25,15 @@ function Home(props){
       }
 
       useDidShow(() => {
-        console.log('componentDidShow')
         getLocalConvList().then(arr => {
           bff.conversation.queryConversationsByIds(arr).then(res => {
-            console.log(res, '-=-=-=-=')
+            console.log('home, componentDidShow -=-=-=-=', res)
             setConvList(res)
           })
+        })
+
+        Taro.removeTabBarBadge({
+          index: 0
         })
       })
 

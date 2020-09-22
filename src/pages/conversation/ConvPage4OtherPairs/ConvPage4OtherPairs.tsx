@@ -28,7 +28,7 @@ function ConvPage4OtherPairs(){
       //   setCanISpeak(true)
       // }
       if(!conv)return
-      wx.setNavigationBarTitle({
+      Taro.setNavigationBarTitle({
         title: conv.get('name')
       })
       setCurrentConv(conv)

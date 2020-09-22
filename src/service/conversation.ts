@@ -4,6 +4,7 @@ import AV from 'leancloud-storage'
 import LCClient from '@/scripts/LCClient'
 import Taro from '@tarojs/taro'
 import bff from '@/api/bff'
+import { isArray } from "lodash";
 
 export const sendMessage = (conv,message) => {
     
@@ -50,21 +51,27 @@ function updateUserRecentContacts(currentUser, friendId){
 /**
  * 更新本地保存的 conversationList
  */
-const updateLocalConvList =  async (newConv) => {
+export const updateLocalConvList =  async (newConv: object | Array<object>) => {
     let arr = []
-    console.log(newConv, '---')
+    let convs = []
+    if (!Array.isArray(newConv)){
+        convs.push(newConv)
+    } else {
+        convs = newConv
+    }
+
     try {
         const list = await storage.getItem('recentConversations')
-        console.log(list, '1111')
         arr = JSON.parse(list)
     } catch (e) {
         console.log(e)
     }
-    console.log('222')
 
-    if(arr.indexOf(newConv.id) > -1)return
+    convs.forEach(conv => {
+        if(arr.indexOf(conv.id) > -1)return
+        arr.push(conv.id)
+    })
 
-    arr.push(newConv.id)
     storage.setItem('recentConversations', JSON.stringify(arr))
 }
 

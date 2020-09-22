@@ -5,6 +5,25 @@
     padding: 0 10px 0 0;
     align-items: center;
 
+
+    .content-wrapper{
+        flex: 1;
+        position: relative;
+
+        .img {
+            width: 160px;
+            height: 160px;
+            position: absolute;
+            top: -160px;
+            left: 50%;
+        }
+    }
+
+    .input--wrapper{
+        display: flex;
+        align-items: center;
+    }
+
     .box__input {
         flex: 1;
     }

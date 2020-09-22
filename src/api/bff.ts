@@ -29,9 +29,6 @@ const user = {
 const conversation = {
     // 传入conversation的id数组, 获取conversation详情
     async queryConversationsByIds(arr: Array<string>){
-        if(arr && arr.length > 2) {
-            arr = [arr[0], arr[1]]
-        }
         return Promise.all(arr.map(async id=>{
             try {
                 const conv = await LCClient.IMClient.getConversation(id)

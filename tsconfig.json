@@ -3,11 +3,12 @@
     "baseUrl": ".",
     "allowJs": false,
     "jsx": "react",
-    "esModuleInterop": true, // 这个很重要啊
+    "esModuleInterop": true, // 兼容esModule, CommonJS包标准
     "paths": {
       "@/*": [
         "./src/*"
       ]
-    }
+    },
+    
   }
 }
